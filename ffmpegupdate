@@ -1,0 +1,17 @@
+#!/bin/bash
+
+fullfilename=${0##*/}
+filename="${fullfilename%.*}"
+logfile="/var/log/scripts/$filename.log"
+email=pasula.ubuntu@gmail.com
+exec > $logfile 2>&1
+
+echo "Script output will be logged to $logfile"
+
+/opt/scripts/scriptheader.sh "FFMpeg Update"
+
+if [[ -f ${logfile} ]]; then
+	echo "Mailing log to ${email}"
+	mail -s "Speedtest Log - $(date +%m-%d-%Y)" ${email} < ${logfile}
+fi
+

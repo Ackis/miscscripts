@@ -23,3 +23,6 @@ done
 
 # Test specific syslog filters
 logger "UFW"
+
+# Test Logrotate
+#/usr/sbin/logrotate -f -v /etc/logrotate.conf

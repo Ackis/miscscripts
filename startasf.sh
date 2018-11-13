@@ -2,7 +2,7 @@
 
 # These are the only variables you should need to change to customize your script
 INTROMESSAGE="Starting Archi Steam Farm. Enjoy your badges."
-SCRIPT_HOME="/opt/scripts/misc"
+ASF_CONFIG_DIR="/opt/ArchiSteamFarm/config/"
 
 # We want to run this as the ASF user
 [[ $UID = 999 ]] || exec sudo su -l archisteamfarm -c "$0"
@@ -46,12 +46,15 @@ function print_and_log() {
 	fi
 }
 
+# Check the path where we ran the script for our crypt key
 if [ -f "${MY_PATH}/cryptkey" ]; then
 	print_and_log "${SCRIPT_NAME}: cryptkey found at ${MY_PATH}/cryptkey." "debug"
 	CRYPTKEY=$(head -n 1 "${MY_PATH}/cryptkey")
-elif [ -f "${SCRIPT_HOME}/services" ]; then
-	print_and_log "${SCRIPT_NAME}: cryptkey file found at ${SCRIPT_HOME}/cryptkey." "debug"
-        readarray -t SERVICES < "${SCRIPT_HOME}/cryptkey"
+# Check the ASF config directory for the crypt key
+elif [ -f "${ASF_CONFIG_DIR}/cryptkey" ]; then
+	print_and_log "${SCRIPT_NAME}: cryptkey file found at ${ASF_CONFIG_DIR}/cryptkey." "debug"
+        readarray -t SERVICES < "${ASF_CONFIG_DIR}/cryptkey"
+# No crypt key file found, therefore assume that we can't run the server and exit.
 else
 	print_and_log "${SCRIPT_NAME}: No cryptkey found." "debug"
 	exit 1

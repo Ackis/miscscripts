@@ -93,7 +93,9 @@ done
 print_and_log "${INTROMESSAGE}"
 
 if [ "${SERVERMODE}" = true ] ; then
+	print_and_log "Starting ASF in server mode."
 	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY" --server
 else
+	print_and_log "Starting ASF in normal."
 	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY"
 fi

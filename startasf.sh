@@ -53,7 +53,7 @@ if [ -f "${MY_PATH}/cryptkey" ]; then
 # Check the ASF config directory for the crypt key
 elif [ -f "${ASF_CONFIG_DIR}/cryptkey" ]; then
 	print_and_log "${SCRIPT_NAME}: cryptkey file found at ${ASF_CONFIG_DIR}/cryptkey." "debug"
-        readarray -t SERVICES < "${ASF_CONFIG_DIR}/cryptkey"
+	CRYPTKEY=$(head -n 1 "${ASF_CONFIG_DIR}/cryptkey")
 # No crypt key file found, therefore assume that we can't run the server and exit.
 else
 	print_and_log "${SCRIPT_NAME}: No cryptkey found." "debug"

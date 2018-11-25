@@ -5,7 +5,8 @@ INTROMESSAGE="Starting Archi Steam Farm. Enjoy your badges."
 ASF_CONFIG_DIR="/opt/ArchiSteamFarm/config/"
 
 # We want to run this as the ASF user
-[[ $UID = 999 ]] || exec sudo su -l archisteamfarm -c "$0"
+# Why doesn't this work?
+#[[ $UID = 999 ]] || exec sudo su -l archisteamfarm -c "$0"
 
 # Display extra logging info
 VERBOSE=false
@@ -94,8 +95,8 @@ print_and_log "${INTROMESSAGE}"
 
 if [ "${SERVERMODE}" = true ] ; then
 	print_and_log "Starting ASF in server mode."
-	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY" --server
+#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY" --server
 else
 	print_and_log "Starting ASF in normal."
-	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY"
+#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY"
 fi

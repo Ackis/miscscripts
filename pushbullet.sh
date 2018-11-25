@@ -2,7 +2,7 @@
 
 # These are the only variables you should need to change to customize your script
 INTROMESSAGE="TBD"
-CONFIG_DIR="/home/user/.config/pushbullet"
+CONFIG_DIR="/home/jpasula/.config/pushbullet"
 CONFIG_FILE="${CONFIG_DIR}/config"
 SCRIPT_NAME="Pushbullet"
 

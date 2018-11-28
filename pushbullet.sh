@@ -53,6 +53,7 @@ function print_and_log() {
 #	-v|--verbose:		Verbose mode
 #	-h|--help:		Display help
 
+POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -73,10 +74,11 @@ do
 			exit 2
 			;;
 		* )
-			VERBOSE=false
+			POSITIONAL+=("$1")
 			shift
 	esac
 done
+set -- "${POSITIONAL[@]}"
 
 # Check the config directory
 if [ -f "${CONFIG_FILE}" ]; then
@@ -99,4 +101,8 @@ else
 	exit 1
 fi
 
+echo "$1"
+echo "$2"
+
 print_and_log "${INTROMESSAGE}"
+#curl --silent -u ""${API_KEY}":" -d type="note" -d body="Body of Message" -d title="Subject Of Message" 'https://api.pushbullet.com/v2/pushes'

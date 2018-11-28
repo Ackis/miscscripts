@@ -2,7 +2,7 @@
 
 
 # These are the only variables you should need to change to customize your script
-INTROMESSAGE="TBD"
+INTROMESSAGE="Intromessage: TBD"
 CONFIG_DIR="/home/jpasula/.config/pushbullet"
 CONFIG_FILE="${CONFIG_DIR}/config"
 SCRIPT_NAME="Pushbullet"
@@ -101,8 +101,22 @@ else
 	exit 1
 fi
 
-echo "$1"
-echo "$2"
+# TODO: Make these easier to understand when an error occurs.
+if [ -z "${1}" ] ; then
+    print_and_log "${SCRIPT_NAME}: Please provide a subject for the message to be sent." "error"
+    exit 1
+else
+    SUBJECT="${1}"
+fi
+
+if [ -z "${2}" ] ; then
+    print_and_log "${SCRIPT_NAME}: Please provice a body of text for the message to be sent." "error"
+    exit 1
+else
+    BODY="${2}"
+fi
+
+
 
 print_and_log "${INTROMESSAGE}"
-#curl --silent -u ""${API_KEY}":" -d type="note" -d body="Body of Message" -d title="Subject Of Message" 'https://api.pushbullet.com/v2/pushes'
+curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes'

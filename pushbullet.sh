@@ -18,7 +18,7 @@ API_KEY=""
 
 function display_help() {
 	echo "Help WIP"
-	echo "-l|--log:		Enabled logging"
+	echo "-l|--log:			Enabled logging"
 	echo "-v|--verbose:		Verbose mode"
 	echo "-h|--help:		Display help"
 }
@@ -82,19 +82,19 @@ set -- "${POSITIONAL[@]}"
 
 # Check the config directory
 if [ -f "${CONFIG_FILE}" ]; then
-    print_and_log "${SCRIPT_NAME}: Config file found at ${CONFIG_FILE}." "debug"
-    declare -A VARS
-    IFS="="
+	print_and_log "${SCRIPT_NAME}: Config file found at ${CONFIG_FILE}." "debug"
+	declare -A VARS
+	IFS="="
         while read -r lvalue rvalue; do
-             VARS[$lvalue]=${rvalue}
-        done < "${CONFIG_FILE}"
+		VARS[$lvalue]=${rvalue}
+	done < "${CONFIG_FILE}"
 
 	if [ -z "${VARS[API_KEY]}" ]; then
-	    echo "damn"
-	    exit 1
+		print_and_log "${SCRIPT_NAME}: No api key found in config file." "error"
+		exit 1
 	else
-	    API_KEY="${VARS[API_KEY]}"
-	 fi
+		API_KEY="${VARS[API_KEY]}"
+	fi
 # No config file, fail script
 else
 	print_and_log "${SCRIPT_NAME}: No config file found." "debug"
@@ -103,24 +103,24 @@ fi
 
 # TODO: Make these easier to understand when an error occurs.
 if [ -z "${1}" ] ; then
-    print_and_log "${SCRIPT_NAME}: Please provide a subject for the message to be sent." "error"
-    exit 1
+	print_and_log "${SCRIPT_NAME}: Please provide a subject for the message to be sent." "error"
+	exit 1
 else
-    SUBJECT="${1}"
+	SUBJECT="${1}"
 fi
 
 if [ -z "${2}" ] ; then
-    print_and_log "${SCRIPT_NAME}: Please provice a body of text for the message to be sent." "error"
-    exit 1
+	print_and_log "${SCRIPT_NAME}: Please provice a body of text for the message to be sent." "error"
+	exit 1
 else
-    BODY="${2}"
+	BODY="${2}"
 fi
 
 print_and_log "${INTROMESSAGE}"
 RESPONSE=$(curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes' | grep "invalid_access_token")
 
 if [ -z "${RESPONSE}" ] ; then
-    print_and_log "${SCRIPT_NAME}: Message sent." "debug"
+	print_and_log "${SCRIPT_NAME}: Message sent." "debug"
 else
-    print_and_log "${SCRIPT_NAME}: Error - message not sent." "error"
+	print_and_log "${SCRIPT_NAME}: Error - message not sent." "error"
 fi

@@ -9,8 +9,8 @@ FILE="/var/run/reboot-required.pkgs"
 logger -t RebootScript -p syslog.info "Checking to see automatic reboot is needed."
 
 if [ -f "${FILE}" ]; then
-	logger -t RebootScript -p syslog.notice "Automatic reboot needed.  Commencing now."
-	/opt/scripts/notifymyandroid/nma.sh "Server" "Ubuntu" "Ubuntu needs to reboot." 2
+	logger -t RebootScript -p syslog.notice "${HOSTNAME} needs an automatic reboot. Performing reboot now."
+	/opt/scripts/misc/pushbullet.sh "Automatice Reboot Needed" "${HOSTNAME} needs an automatic reboot. Performing reboot now."
 	apt-get autoremove
 	apt-get update
 	/sbin/shutdown -r now

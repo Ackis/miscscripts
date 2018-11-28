@@ -116,7 +116,11 @@ else
     BODY="${2}"
 fi
 
-
-
 print_and_log "${INTROMESSAGE}"
-curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes'
+RESPONSE=$(curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes' | grep "invalid_access_token")
+
+if [ -z "${RESPONSE}" ] ; then
+    print_and_log "${SCRIPT_NAME}: Message sent." "debug"
+else
+    print_and_log "${SCRIPT_NAME}: Error - message not sent." "error"
+fi

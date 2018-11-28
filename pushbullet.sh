@@ -12,8 +12,8 @@ VERBOSE=false
 LOG=true
 
 # Internal script variables
-SCRIPT_NAME="$0"
-MY_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_COMMAND="$0"
+SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 API_KEY=""
 
 function display_help() {
@@ -38,11 +38,12 @@ function print_and_log() {
 
 	# Do we want to log?
 	if [ "${LOG}" = true ] ; then
-		# Were we passed a second argmument?
+	    # Were we passed a second argmument?
+# TODO: Fix pathing for logging. Right now it can log as "PATH./script.sh"
 		if [ ! -z "${2}" ] ; then
-			logger -t "${SCRIPT_NAME}" -p "syslog.${2}" "${1}"
+			logger -t "${SCRIPT_PATH}${SCRIPT_COMMAND}" -p "syslog.${2}" "${1}"
 		else
-			logger -t "${SCRIPT_NAME}" -p syslog.debug "$1"
+			logger -t "${SCRIPT_PATH}${SCRIPT_COMMAND}" -p syslog.debug "$1"
 		fi
 	fi
 }

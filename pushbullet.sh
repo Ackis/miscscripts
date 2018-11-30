@@ -15,6 +15,7 @@ LOG=true
 SCRIPT_COMMAND="$0"
 SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 API_KEY=""
+DEVICE_ID=""
 
 function display_help() {
 	echo "Help WIP"
@@ -93,11 +94,20 @@ if [ -f "${CONFIG_FILE}" ]; then
 		print_and_log "${SCRIPT_NAME}: No api key found in config file." "error"
 		exit 1
 	else
+		print_and_log "${SCRIPT_NAME}: Api key found in config file." "debug"
 		API_KEY="${VARS[API_KEY]}"
 	fi
+
+	if [ -z "${VARS[DEVICE_ID]}" ]; then
+		print_and_log "${SCRIPT_NAME}: No device id found in config file. Will send to all devices." "debug"
+	else
+		print_and_log "${SCRIPT_NAME}: A device id was found in config file: ${VARS[DEVICE_ID]}" "debug"
+		DEVICE_ID="${VARS[DEVICE_ID]}"
+	fi
+
 # No config file, fail script
 else
-	print_and_log "${SCRIPT_NAME}: No config file found." "debug"
+	print_and_log "${SCRIPT_NAME}: No config file found. Script will now exit." "error"
 	exit 1
 fi
 
@@ -117,8 +127,15 @@ else
 fi
 
 print_and_log "${INTROMESSAGE}"
-RESPONSE=$(curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes' | grep "invalid_access_token")
 
+# Send to specific device if we have it in the config.
+#if [ "${DEVICE_ID}" == "" ]; then
+	RESPONSE=$(curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes' | grep "invalid_access_token")
+#else
+#	RESPONSE=$(curl --silent -u ""${API_KEY}":" -d type="note" -d body=\""${BODY}"\" -d device_iden=\""${DEVICE_ID}"\" -d title=\""${SUBJECT}"\" 'https://api.pushbullet.com/v2/pushes' | grep "invalid_access_token")
+#fi
+
+# Check to see if the message was sent.
 if [ -z "${RESPONSE}" ] ; then
 	print_and_log "${SCRIPT_NAME}: Message sent." "debug"
 else

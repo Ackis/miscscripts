@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 
 # These are the only variables you should need to change to customize your script

@@ -21,6 +21,7 @@ function display_help() {
 	echo "-v|--verbose:		Verbose mode"
 	echo "-h|--help:		Display help"
 	echo "-s|--server:		Run in server mode"
+	echo "-l|--log:			Enable logging"
 }
 
 function print_and_log() {
@@ -61,11 +62,6 @@ else
 	exit 1
 fi
 
-# Command line parameters:
-#	-v|--verbose:		Verbose mode
-#	-h|--help:		Display help
-#	-s|--server:		Run in server mode
-
 while [[ $# -gt 0 ]]
 do
 	key="$1"
@@ -80,6 +76,10 @@ do
 			;;
 		-s | --server )
 			SERVERMODE=true
+			shift
+			;;
+		-l | --log )
+			LOG=true
 			shift
 			;;
 		* )

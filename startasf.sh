@@ -73,7 +73,6 @@ do
 		-v | --verbose )
 			VERBOSE=true
 			shift
-			echo "Verbose mode enabled."
 			;;
 		-h | --help )
 			display_help
@@ -82,7 +81,6 @@ do
 		-s | --server )
 			SERVERMODE=true
 			shift
-			echo "Running in servermode."
 			;;
 		* )
 			VERBOSE=false
@@ -95,8 +93,8 @@ print_and_log "${INTROMESSAGE}"
 
 if [ "${SERVERMODE}" = true ] ; then
 	print_and_log "Starting ASF in server mode."
-#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY" --server
+	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}" --server
 else
-	print_and_log "Starting ASF in normal."
-#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="$CRYPTKEY"
+	print_and_log "Starting ASF in normal mode."
+	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}"
 fi

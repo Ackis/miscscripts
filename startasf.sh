@@ -10,7 +10,7 @@ ASF_CONFIG_DIR="/opt/ArchiSteamFarm/config/"
 
 # Display extra logging info
 VERBOSE=false
-LOG=true
+LOG=false
 SERVERMODE=false
 
 SCRIPT_NAME="$0"

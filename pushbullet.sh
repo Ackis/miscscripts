@@ -104,6 +104,7 @@ if [ -f "${CONFIG_FILE}" ]; then
 		print_and_log "${SCRIPT_NAME}: A device id was found in config file: ${VARS[DEVICE_ID]}" "debug"
 		DEVICE_ID="${VARS[DEVICE_ID]}"
 	fi
+	unset IFS
 
 # No config file, fail script
 else

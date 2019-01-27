@@ -35,15 +35,15 @@ function print_and_log() {
 	if [ "${VERBOSE}" = true ] ; then
 		# We can assume we have an argument here
 		echo "${1}"
-	fi
 
-	# Do we want to log?
-	if [ "${LOG}" = true ] ; then
-		# Were we passed a second argmument?
-		if [ ! -z "${2}" ] ; then
-			logger -t ArchiSteamFarm -p "syslog.${2}" "${1}"
-		else
-			logger -t ArchiSteamFarm -p syslog.info "$1"
+		# Do we want to log?
+		if [ "${LOG}" = true ] ; then
+			# Were we passed a second argmument?
+			if [ ! -z "${2}" ] ; then
+				logger -t ArchiSteamFarm -p "syslog.${2}" "${1}"
+			else
+				logger -t ArchiSteamFarm -p syslog.info "${1}"
+			fi
 		fi
 	fi
 }
@@ -93,8 +93,8 @@ print_and_log "${INTROMESSAGE}"
 
 if [ "${SERVERMODE}" = true ] ; then
 	print_and_log "Starting ASF in server mode."
-#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}" --server
+	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}" --server
 else
 	print_and_log "Starting ASF in normal mode."
-#	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}"
+	/opt/ArchiSteamFarm/ArchiSteamFarm --cryptkey="${CRYPTKEY}"
 fi

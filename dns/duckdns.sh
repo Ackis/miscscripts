@@ -43,6 +43,7 @@ function print_and_log() {
 	fi
 }
 
+IP6=$(ip -6 -o addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)
 # Check the path where we ran the script for our key
 if [ -f "${MY_PATH}/token" ]; then
 	print_and_log "Token found at ${MY_PATH}/token." "info"
@@ -62,7 +63,8 @@ print_and_log "${INTROMESSAGE}" "info"
 for index in "${!DOMAINS[@]}"; do
 	print_and_log "Updating dynamic IP of ${DOMAINS[index]}.duckdns.org" "info"
 	# Leaving the IP blank, the service detects our IP.
-	URL="https://www.duckdns.org/update?domains=${DOMAINS[index]}&token=$TOKEN&ip="
+	URL="https://www.duckdns.org/update?domains=${DOMAINS[index]}&token=${TOKEN}&ip=&ipv6=${IP6}&verbose=${VERBOSE}"
+echo "${URL}"
 	CMD=$(curl -s -S -f "${URL}")
 	STATUS="$?"
 	echo "${CMD}"

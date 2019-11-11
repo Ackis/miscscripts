@@ -43,7 +43,6 @@ function print_and_log() {
 	fi
 }
 
-IP6=$(ip -6 -o addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)
 # Check the path where we ran the script for our key
 if [ -f "${MY_PATH}/token" ]; then
 	print_and_log "Token found at ${MY_PATH}/token." "info"
@@ -62,13 +61,24 @@ print_and_log "${INTROMESSAGE}" "info"
 
 for index in "${!DOMAINS[@]}"; do
 	print_and_log "Updating dynamic IP of ${DOMAINS[index]}.duckdns.org" "info"
-	# Leaving the IP blank, the service detects our IP.
-	URL="https://www.duckdns.org/update?domains=${DOMAINS[index]}&token=${TOKEN}&ip=&ipv6=${IP6}&verbose=${VERBOSE}"
-echo "${URL}"
+
+	# Construct the URL
+	# Leaving the IP4 blank, the service detects our IP.
+	# Get the IP6 address of the system
+	IPV6=$(ip -6 -o addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)
+
+	if [ -z "${IPV6}" ] ; then
+		echo "Error: No IP6 address found."
+		URL="https://www.duckdns.org/update?domains=${DOMAINS[index]}&token=${TOKEN}&verbose=${VERBOSE}"
+	else
+		URL="https://www.duckdns.org/update?domains=${DOMAINS[index]}&token=${TOKEN}&ip=&ipv6=${IPV6}&verbose=${VERBOSE}"
+	fi
+
+	echo "Sending URL: ${URL}"
 	CMD=$(curl -s -S -f "${URL}")
 	STATUS="$?"
-	echo "${CMD}"
-	echo "${STATUS}"
+	echo "CMD ${CMD}"
+	echo "STATUS ${STATUS}"
 	if [ "${STATUS}" = 0 ] ; then
 		print_and_log "Successfully updated dynamic IP of ${DOMAINS[index]}.duckdns.org" "info"
 	else

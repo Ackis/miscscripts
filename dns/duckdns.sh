@@ -11,12 +11,12 @@ LOG=true
 SCRIPT_NAME="$0"
 MY_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ ! -f "${MY_PATH}/domains" ]; then
+if [ ! -f "${MY_PATH}/duckdns_domains" ]; then
 	DOMAINS=(
 		"ackis"
 )
 	else
-	readarray -t DOMAINS < "${MY_PATH}/domains"
+	readarray -t DOMAINS < "${MY_PATH}/duckdns_domains"
 fi
 
 function print_and_log() {
@@ -44,13 +44,13 @@ function print_and_log() {
 }
 
 # Check the path where we ran the script for our key
-if [ -f "${MY_PATH}/token" ]; then
-	print_and_log "Token found at ${MY_PATH}/token." "info"
-	TOKEN=$(head -n 1 "${MY_PATH}/token")
+if [ -f "${MY_PATH}/duckdns_token" ]; then
+	print_and_log "Token found at ${MY_PATH}/duckdns_token." "info"
+	TOKEN=$(head -n 1 "${MY_PATH}/duckdns_token")
 # Check the config directory for the key
-elif [ -f "${CONFIG_DIR}/token" ]; then
-	print_and_log "Token file found at ${CONFIG_DIR}/token." "info"
-	TOKEN=$(head -n 1 "${CONFIG_DIR}/token")
+elif [ -f "${CONFIG_DIR}/duckdns_token" ]; then
+	print_and_log "Token file found at ${CONFIG_DIR}/duckdns_token." "info"
+	TOKEN=$(head -n 1 "${CONFIG_DIR}/duckdns_token")
 # No crypt key file found, therefore assume that we can't run and exit.
 else
 	print_and_log "No token found." "error"

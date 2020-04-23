@@ -19,48 +19,26 @@ if [ ! -f "${MY_PATH}/duckdns_domains" ]; then
 	readarray -t DOMAINS < "${MY_PATH}/duckdns_domains"
 fi
 
-function print_and_log() {
-	# If we weren't passed an argument, fail.
-	if [ -z "${1}" ] ; then
-		echo "Error: No parameter passed to print_and_log. Function needs at least one string."
-		return 1
-	fi
-
-	# If verbose is enabled, spout more text.
-	if [ "${VERBOSE}" = true ] ; then
-		# We can assume we have an argument here
-		echo "${1}"
-	fi
-
-	# Do we want to log?
-	if [ "${LOG}" = true ] ; then
-		# Were we passed a second argmument?
-		if [ ! -z "${2}" ] ; then
-			logger -t DuckDNS -p "syslog.${2}" "${1}"
-		else
-			logger -t DuckDNS -p syslog.debug "$1"
-		fi
-	fi
-}
+source /opt/scripts/misc/common.sh
 
 # Check the path where we ran the script for our key
 if [ -f "${MY_PATH}/duckdns_token" ]; then
-	print_and_log "Token found at ${MY_PATH}/duckdns_token." "info"
+	print_and_log "Token found at ${MY_PATH}/duckdns_token." "DuckDNS" "info"
 	TOKEN=$(head -n 1 "${MY_PATH}/duckdns_token")
 # Check the config directory for the key
 elif [ -f "${CONFIG_DIR}/duckdns_token" ]; then
-	print_and_log "Token file found at ${CONFIG_DIR}/duckdns_token." "info"
+	print_and_log "Token file found at ${CONFIG_DIR}/duckdns_token." "DuckDNS" "info"
 	TOKEN=$(head -n 1 "${CONFIG_DIR}/duckdns_token")
 # No crypt key file found, therefore assume that we can't run and exit.
 else
-	print_and_log "No token found." "error"
+	print_and_log "No token found." "DuckDNS" "error"
 	exit 1
 fi
 
-print_and_log "${INTROMESSAGE}" "info"
+print_and_log "${INTROMESSAGE}" "DuckDNS" "info"
 
 for index in "${!DOMAINS[@]}"; do
-	print_and_log "Updating dynamic IP of ${DOMAINS[index]}.duckdns.org" "info"
+	print_and_log "Updating dynamic IP of ${DOMAINS[index]}.duckdns.org" "DuckDNS" "info"
 
 	# Construct the URL
 	# Leaving the IP4 blank, the service detects our IP.
@@ -80,8 +58,8 @@ for index in "${!DOMAINS[@]}"; do
 	echo "CMD ${CMD}"
 	echo "STATUS ${STATUS}"
 	if [ "${STATUS}" = 0 ] ; then
-		print_and_log "Successfully updated dynamic IP of ${DOMAINS[index]}.duckdns.org" "info"
+		print_and_log "Successfully updated dynamic IP of ${DOMAINS[index]}.duckdns.org" "DuckDNS" "info"
 	else
-		print_and_log "Failed opdating dynamic IP of ${DOMAINS[index]}.duckdns.org" "error"
+		print_and_log "Failed opdating dynamic IP of ${DOMAINS[index]}.duckdns.org" "DuckDNS" "error"
 	fi
 done

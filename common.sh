@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Function to print on screen and log to syslog.
 # Syntax: print_and_log(message, app, syslog [debug], verbose [true], log [true])
 
